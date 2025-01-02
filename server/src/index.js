@@ -30,6 +30,13 @@ app.use("/api/auth", authRoutes);
 app.use("/api/messages", messageRoutes);
 app.use("/api/group", groupRoutes);
 
+
+app.get('*',(req,res,next)=>{
+  res.status(200).json({
+    message:'received request'
+  })
+})
+
 server.listen(PORT, () => {
   console.log("server is running on PORT:" + PORT);
   connectDB();
