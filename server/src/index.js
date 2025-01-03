@@ -18,13 +18,17 @@ const PORT = process.env.PORT || 5001;
 const __dirname = path.resolve();
 app.use(express.json({ limit: "10mb" })); // Adjust size limit as needed
 app.use(express.urlencoded({ limit: "10mb", extended: true }));
-  app.use(cookieParser());
+app.use(cookieParser());
+
 app.use(
   cors({
-    origin: "*",
-    credentials: true,
+    origin: "*", // Allow your frontend's URL
+    credentials: true,              // Allow cookies or authorization headers
+    methods: "GET, POST, PUT, DELETE", // Specify allowed HTTP methods
+    allowedHeaders: "Content-Type, Authorization", // Allowed headers
   })
 );
+
 
 app.use("/api/auth", authRoutes);
 app.use("/api/messages", messageRoutes);
