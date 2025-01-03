@@ -35,7 +35,7 @@ app.use("/api/messages", messageRoutes);
 app.use("/api/group", groupRoutes);
 
 
-app.get('*',(req,res,next)=>{
+app.get('*',(req,res)=>{
   res.status(200).json({
     message:'received request'
   })
