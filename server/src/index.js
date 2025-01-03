@@ -22,7 +22,7 @@ app.use(cookieParser());
 
 app.use(
   cors({
-    origin: "*", // Allow your frontend's URL
+    origin: "http://localhost:5173", // Allow your frontend's URL
     credentials: true,              // Allow cookies or authorization headers
     methods: "GET, POST, PUT, DELETE", // Specify allowed HTTP methods
     allowedHeaders: "Content-Type, Authorization", // Allowed headers
