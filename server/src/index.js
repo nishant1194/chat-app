@@ -35,11 +35,21 @@ app.use("/api/messages", messageRoutes);
 app.use("/api/group", groupRoutes);
 
 
-app.get('*',(req,res)=>{
-  res.status(200).json({
-    message:'received request'
-  })
-})
+app.get('*', (req, res) => {
+  try {
+    // Your route logic here
+    res.status(200).json({
+      message: 'Received request',
+    });
+  } catch (error) {
+    console.error("Error in catch-all route:", error); // Log the error
+    res.status(500).json({
+      message: 'Internal Server Error',
+      error: error.message,
+    });
+  }
+});
+
 
 server.listen(PORT, () => {
   console.log("server is running on PORT:" + PORT);
