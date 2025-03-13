@@ -17,12 +17,11 @@ const PORT = process.env.PORT || 5001;
 app.use(express.urlencoded({ limit: "10mb", extended: true }));
   app.use(cookieParser());
   
-app.use(
-  cors({
-    origin: "*",
-    credentials: true,
-  })
-);
+app.use(cors({
+    origin: '*',
+    credentials: true
+  }));
+
 
 app.use("/api/auth", authRoutes);
 app.use("/api/messages", messageRoutes);
