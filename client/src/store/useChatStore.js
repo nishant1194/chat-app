@@ -1,10 +1,15 @@
 import { create } from "zustand";
 import toast from "react-hot-toast";
- import { useAuthStore } from "./useAuthStore";
+import { useAuthStore } from "./useAuthStore";
 import Url from "../utils/Url";
 
 export const useChatStore = create((set, get) => ({
   messages: [],
+  aiMsg: [],
+  setAiMsg: (data) => {
+    const currentAiMsg = get().aiMsg; // Access the current aiMsg state
+    set({ aiMsg: [...currentAiMsg, data] }); // Update aiMsg with new data
+  },
   users: [],
   selectedUser: null,
   isUsersLoading: false,
@@ -37,12 +42,15 @@ export const useChatStore = create((set, get) => ({
     const { selectedUser, messages } = get();
     const authUser = useAuthStore.getState().authUser;
     try {
-        const res = await axios.get(Url +`/api/messages/${selectedUser?._id}/${authUser?._id}` ,{withCredentials:true});
-        set({ messages: [...messages, res.data] });
+      const res = await axios.get(
+        Url + `/api/messages/${selectedUser?._id}/${authUser?._id}`,
+        { withCredentials: true }
+      );
+      set({ messages: [...messages, res.data] });
     } catch (error) {
       toast.error(error.response.data.message);
     }
   },
 
-    setSelectedUser: (selectedUser) => set({ selectedUser }),
+  setSelectedUser: (selectedUser) => set({ selectedUser }),
 }));

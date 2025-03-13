@@ -5,8 +5,9 @@ import axios from "axios";
 import Url from "../utils/Url";
 import Message from "./Message";
 import MessageInput from "./MessageInput";
+import AiChatBox from "./AiChatBox";
 
-export default function ChatBox() {
+export default function ChatBox({sideBar}) {
     const [text, setText] = useState("");
   const [imagePreview, setImagePreview] = useState(null);
   const fileInputRef = useRef(null);
@@ -25,8 +26,7 @@ export default function ChatBox() {
       console.log("Error in getting mesaages", error);
     }
   };
-
-   
+  
   useEffect(() => {
     getMessages();
      socket.on("newMessage", (messageData) => {
@@ -36,10 +36,16 @@ export default function ChatBox() {
     return () => socket.off("newMessage");
 
   }, [selectedUser?._id]);
-
+ 
+if(selectedUser?._id =='ai'){
+   return(
+    <AiChatBox />
+  )
+}
+ 
   return (
     <>
-   {selectedUser? <div className="flex-grow bg-[#e5ddd5] p-6 flex flex-col">
+   {selectedUser? <div className="w-3 flex-grow bg-[#e5ddd5] p-6 flex flex-col">
       <div className="text-2xl font-semibold mb-2">{selectedUser?.fullName}</div>
       <div className="h-1 bg-[#eae9e8] my-2" ></div>
       <div className="flex-grow overflow-y-auto space-y-4">
@@ -76,8 +82,8 @@ export default function ChatBox() {
           </svg>
         </button>
       </div> */}
-      <MessageInput message={message} setMessages={setMessages} />
-    </div>:
+      <MessageInput message={message} setMessages={setMessages} sideBar={sideBar} />
+            </div>:
               <div className="w-full h-full bg-blue-100 text-center p-4 flex justify-center items-center">
               <div>
                 <h2 className="text-2xl font-bold">Getting Started</h2>

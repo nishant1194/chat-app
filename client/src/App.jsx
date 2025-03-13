@@ -10,6 +10,7 @@ import { Toaster } from "react-hot-toast";
 
 import { Routes, Route, Navigate } from "react-router-dom";
 import { useAuthStore } from "./store/useAuthStore";
+import Checking from './pages/Checking'
 
 function App() {
   const { authUser,checkAuth, onlineUsers } = useAuthStore(); 
@@ -22,6 +23,7 @@ function App() {
   return (
    <>
     <Routes>
+      <Route path='/chicking' element={<Checking />} />
         <Route path="/" element={authUser ? <HomePage /> : <Navigate to="/login" />} />
         <Route path="/signup" element={!authUser ? <SignUpPage /> : <Navigate to="/" />} />
         <Route path="/login" element={!authUser ? <LoginPage /> : <Navigate to="/" />} />

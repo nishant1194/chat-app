@@ -4,13 +4,14 @@ import { useAuthStore } from "../store/useAuthStore";
 import toast from "react-hot-toast"; // Assuming you are using react-hot-toast for error toasts
 import axios from "axios";
 import Url from "../utils/Url";
+import { useNavigate } from "react-router-dom";
 
 export default function ProfileModal({ setShowProfile }) {
-  const { authUser, updateProfile } = useAuthStore(); // Assuming updateProfile exists in your store
+  const navigation = useNavigate();
+  const { authUser, updateProfile ,checkAuth} = useAuthStore(); // Assuming updateProfile exists in your store
   const [imagePreview, setImagePreview] = useState(null);
   const fileInputRef = useRef(null);
-
-  const handleImageChange = (e) => {
+   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (!file?.type.startsWith("image/")) {
       toast.error("Please select an image file");
@@ -38,7 +39,23 @@ export default function ProfileModal({ setShowProfile }) {
         toast.success("Profile updated!");
       } catch (error) {}
     }
+    toast.error("No Picture Selected!");
   };
+
+  const handleLogout = async () => {
+       try {
+        const resp = await axios.post(
+          Url + "/api/auth/logout"
+         );
+        console.log(resp);
+         toast.success(resp?.data?.message);
+         await checkAuth();
+         navigation("/login")
+        } catch (error) {
+          console.log(error)
+         toast.error("Somthing went wrong!");
+      }
+   };
 
   return (
     <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center">
@@ -91,14 +108,21 @@ export default function ProfileModal({ setShowProfile }) {
             {authUser.fullName}
           </h2>
           <p className="text-sm text-gray-500">{authUser.email}</p>
-          <p className="text-sm text-gray-500">Active now</p>
 
           {/* Edit Profile Button */}
           <button
+           disabled ={!imagePreview}
             onClick={handleProfileUpdate}
-            className="mt-4 w-full bg-[#25d366] text-white py-2 rounded-full text-lg hover:bg-[#128C7E] transition"
+            className="mt-4 w-full disabled:cursor-not-allowed bg-[#25d366] text-white py-2 rounded-full text-lg hover:bg-[#128C7E] transition"
           >
             Save Changes
+          </button>
+
+          <button
+            onClick={handleLogout}
+            className="mt-1 w-full bg-[#25d366] text-white py-2 rounded-full text-lg hover:bg-[#128C7E] transition"
+          >
+            Logout
           </button>
         </div>
       </div>
